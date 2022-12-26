@@ -1,19 +1,20 @@
 import path from "path";
-
+import db from './db';
 import express from "express";
 import cors from "cors";
+import routes from './routes'
+import bodyParser from 'body-parser';
 
+db.connect();
 const app = express();
 // init middleware
 if (process.env.NODE_ENV === "development") {
   app.use(cors());
 }
 // define routes
-app.get("/api", (req, res) => {
-  // send the request back to the client
-  console.log("GET /api");
-  res.send({ message: "Hello from the server!" }).status(200);
-});
+app.use(bodyParser.json());
+app.use(cors());
+app.use('/', routes);
 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();
